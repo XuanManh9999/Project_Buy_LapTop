@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import NguoiDung, SanPham
 from django.contrib import messages
+import locale
 # import add_message
 
 # Create your views here.
 def index(request):
     # lay tat ca san pham tu database
     products = SanPham.objects.all()
+    # fort mat do tien te cho gia san pham
+    locale.setlocale(locale.LC_ALL, 'vi_VN')
+    for product in products:
+        product.gia_san_pham = locale.currency(product.gia_san_pham, grouping=True)
+        
     return render(request, 'common/products.html', {'products': products})
 def checkout(request):
     return render(request, 'common/checkout.html')
