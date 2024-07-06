@@ -35,4 +35,7 @@ urlpatterns = [
     path('user_manage/delete/<int:user_id>/', views.delete_user, name='user_delete'),
     # product delete
     path('product_manage/delete/<int:product_id>/', views.delete_product, name='product_delete'),
+    # add_cart
+      path('add-to-cart/<int:product_id>/', views.add_cart, name='add_to_cart'),
+    path('remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
 ]

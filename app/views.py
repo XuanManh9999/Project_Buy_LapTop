@@ -6,16 +6,32 @@ import locale
 
 # Create your views here.
 def index(request):
-    # lay tat ca san pham tu database
-    products = SanPham.objects.all()
-    # fort mat do tien te cho gia san pham
+     # Lấy giỏ hàng từ session
+    cart = request.session.get('cart', {})
+    
+    # Lấy danh sách các sản phẩm từ giỏ hàng
+    product_ids = cart.keys()
+    products_in_cart = SanPham.objects.filter(id__in=product_ids)
+    # Tính toán tổng số lượng và tổng tiền
+    total_quantity = sum(cart[str(product.id)] for product in products_in_cart)
+    total_price = sum(product.gia_san_pham * cart[str(product.id)] for product in products_in_cart)
+    
+    # Định dạng tiền tệ cho giá sản phẩm
     locale.setlocale(locale.LC_ALL, 'vi_VN')
-    for product in products:
+    for product in products_in_cart:
         product.gia_san_pham = locale.currency(product.gia_san_pham, grouping=True)
-        
-    return render(request, 'common/products.html', {'products': products})
+    # lay all product
+    products = SanPham.objects.all()
+    return render(request, 'common/products.html', {
+        'products': products,
+        'total_quantity': total_quantity,
+        'total_price': locale.currency(total_price, grouping=True),
+        'products_in_cart': products_in_cart,
+        'cart': cart,
+    })
 def checkout(request):
     return render(request, 'common/checkout.html')
+
 def detail_product(request):
     return render(request, 'common/detail_product.html')
 def store(request):
@@ -177,3 +193,48 @@ def logout_view(request):
     # Xóa session để đăng xuất người dùng
     request.session.flush()
     return redirect('login')
+
+def add_cart(request, product_id):
+    # Kiểm tra xem người dùng đã đăng nhập chưa
+    if not request.session.get('id'):
+        return redirect('login')
+
+    # Lấy giỏ hàng từ session
+    cart = request.session.get('cart', {})
+
+    # Chuyển đổi product_id sang chuỗi nếu cần thiết
+    product_id_str = str(product_id)
+
+    # Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    if product_id_str in cart:
+        # Nếu có rồi thì tăng số lượng lên 1
+        cart[product_id_str] += 1
+    else:
+        # Nếu chưa có thì thêm sản phẩm vào giỏ hàng với số lượng là 1
+        cart[product_id_str] = 1
+
+    # Lưu giỏ hàng vào session
+    request.session['cart'] = cart
+
+
+    return redirect('index')
+
+    
+def remove_from_cart(request, product_id):
+    # Lấy giỏ hàng từ session
+    cart = request.session.get('cart', {})
+
+    # Chuyển đổi product_id sang chuỗi nếu cần thiết
+    product_id_str = str(product_id)
+
+    # Kiểm tra xem sản phẩm có trong giỏ hàng không
+    if product_id_str in cart:
+        # Nếu có, xóa sản phẩm khỏi giỏ hàng
+        del cart[product_id_str]
+
+        # Cập nhật lại giỏ hàng trong session
+        request.session['cart'] = cart
+
+    # Chuyển hướng về trang index hoặc trang giỏ hàng (tuỳ theo yêu cầu của bạn)
+    return redirect('index')  # Thay 'index' bằng tên của URL pattern cho trang hiển thị giỏ hàng    
+    
