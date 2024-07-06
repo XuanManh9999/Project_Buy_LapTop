@@ -1,78 +1,168 @@
-{% extends "manage/base.html" %}
-{%load static%}
-{% block manage_user%}
+{% extends "manage/base.html" %} {%load static%} {% block manage_user%}
 <main class="container">
-    <h1>Quản lý người dùng</h1>
-    <!-- START FORM -->
-    <form action='' method='post'>
-     <div class="my-3 p-3 bg-body rounded shadow-sm">
-         <div class="mb-3 row">
-             <label for="nim" class="col-sm-2 col-form-label">NIM</label>
-             <div class="col-sm-10">
-                 <input type="number" class="form-control" name='nim' id="nim">
-             </div>
-         </div>
-         <div class="mb-3 row">
-             <label for="nama" class="col-sm-2 col-form-label">Nama</label>
-             <div class="col-sm-10">
-                 <input type="text" class="form-control" name='nama' id="nama">
-             </div>
-         </div>
-         <div class="mb-3 row">
-             <label for="jurusan" class="col-sm-2 col-form-label">Jurusan</label>
-             <div class="col-sm-10">
-                 <input type="text" class="form-control" name='jurusan' id="jurusan">
-             </div>
-         </div>
-         <div class="mb-3 row">
-             <label for="jurusan" class="col-sm-2 col-form-label"></label>
-             <div class="col-sm-10"><button type="submit" class="btn btn-primary" name="submit">SIMPAN</button></div>
-         </div>
-       </form>
-     </div>
-     <!-- AKHIR FORM -->
-     
-     <!-- START DATA -->
-     <div class="my-3 p-3 bg-body rounded shadow-sm">
-             <!-- FORM PENCARIAN -->
-             <div class="pb-3">
-               <form class="d-flex" action="" method="get">
-                   <input class="form-control me-1" type="search" name="katakunci" value="" placeholder="Masukkan kata kunci" aria-label="Search">
-                   <button class="btn btn-secondary" type="submit">Cari</button>
-               </form>
-             </div>
-             
-             <!-- TOMBOL TAMBAH DATA -->
-             <div class="pb-3">
-               <a href='' class="btn btn-primary">+ Tambah Data</a>
-             </div>
-       
-             <table class="table table-striped">
-                 <thead>
-                     <tr>
-                         <th class="col-md-1">No</th>
-                         <th class="col-md-3">NIM</th>
-                         <th class="col-md-4">Nama</th>
-                         <th class="col-md-2">Jurusan</th>
-                         <th class="col-md-2">Aksi</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                     <tr>
-                         <td>1</td>
-                         <td>1001</td>
-                         <td>Ani</td>
-                         <td>Ilmu Komputer</td>
-                         <td>
-                             <a href='' class="btn btn-warning btn-sm">Edit</a>
-                             <a href='' class="btn btn-danger btn-sm">Del</a>
-                         </td>
-                     </tr>
-                 </tbody>
-             </table>
-            
-       </div>
-       <!-- AKHIR DATA -->
- </main>
+  <h1>Quản lý người dùng</h1>
+  <!-- START FORM -->
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    <strong>{{ message }}</strong>
+  </div>
+  {% endfor %} {% endif %}
+  <form action="{% url 'user_manage' %}" method="post">
+    {% csrf_token %}
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+      <div class="mb-3 row">
+        <label for="nim" class="col-sm-2 col-form-label">ID</label>
+        <div class="col-sm-10">
+          <input
+            type="number"
+            class="form-control"
+            name="id"
+            id="ID"
+            readonly
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="nama" class="col-sm-2 col-form-label">Họ và tên</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="name" id="HO_TEN" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="date" class="col-sm-2 col-form-label">Ngày sinh</label>
+        <div class="col-sm-10">
+          <input type="date" class="form-control" name="date" id="NGAY_SINH" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="jurusan" class="col-sm-2 col-form-label"
+          >Số điện thoại</label
+        >
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="phone" id="PHONE" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+          <input type="email" class="form-control" name="email" id="EMAIL" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="password" class="col-sm-2 col-form-label">Mật khẩu</label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            class="form-control"
+            name="password"
+            id="PASSWORD"
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="address" class="col-sm-2 col-form-label">Địa chỉ</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="address" id="ADDRESS" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="role" class="col-sm-2 col-form-label">Vai trò</label>
+        <div class="col-sm-10">
+          <select
+            class="form-select"
+            name="role"
+            id="role"
+            aria-label="Default select example"
+          >
+            <option value="admin">admin</option>
+            <option value="user">user</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="jurusan" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-primary" name="submit">
+            Cập nhật
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- AKHIR FORM -->
 
- {% endblock manage_user%}
+  <!-- START DATA -->
+  <div class="my-3 p-3 bg-body rounded shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="col-md-1">ID</th>
+            <th class="col-md-3">Họ và tên</th>
+            <th class="col-md-4">Chi tiêu</th>
+            <th class="col-md-2">Ngày sinh</th>
+            <th class="col-md-2">Số điện thoại</th>
+            <th class="col-md-1">email</th>
+            <th class="col-md-3">Mật khẩu</th>
+            <th class="col-md-4">địa chỉ</th>
+            <th class="col-md-2">Ngày thêm</th>
+            <th class="col-md-2">Ngày cập nhật</th>
+            <th class="col-md-2">Vai trò</th>
+            <th class="col-md-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if users %} {% for user in users %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.ho_va_ten }}</td>
+            <td>{{ user.diem }}</td>
+            <td>{{ user.ngay_sinh }}</td>
+            <td>{{ user.so_dien_thoai }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.mat_khau }}</td>
+            <td>{{ user.dia_chi }}</td>
+            <td>{{ user.ngay_tao }}</td>
+            <td>{{ user.ngay_cap_nhat }}</td>
+            <td>{{ user.vai_tro }}</td>
+            <td class="d-flex" style="gap: 3px">
+              <button
+                class="btn btn-warning btn-sm"
+                onclick="editUser('{{ user.id }}', '{{ user.ho_va_ten }}', '{{ user.ngay_sinh }}', '{{ user.so_dien_thoai }}', '{{ user.email }}', '{{ user.mat_khau }}', '{{ user.dia_chi }}', '{{ user.vai_tro }}')"
+              >
+                Edit
+              </button>
+              <form
+                action="{% url 'user_delete' user.id %}"
+                method="post"
+                onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này?');"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Del</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="12">Không có người dùng nào</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- AKHIR DATA -->
+</main>
+<script>
+  function editUser(id, name, date, phone, email, password, address, role) {
+    document.getElementById("ID").value = id;
+    document.getElementById("HO_TEN").value = name;
+    document.getElementById("NGAY_SINH").value = date;
+    document.getElementById("PHONE").value = phone;
+    document.getElementById("EMAIL").value = email;
+    document.getElementById("PASSWORD").value = password;
+    document.getElementById("ADDRESS").value = address;
+    document.getElementById("role").value = role;
+  }
+</script>
+{% endblock manage_user%}

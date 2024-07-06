@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'Project_Ban_May_Tinh.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "web_ban_trai_cay",
+        "NAME": "web_ban_may_tinh",
         "USER": "root",
         "PASSWORD": "",
         "HOST": "127.0.0.1",

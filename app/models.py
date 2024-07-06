@@ -8,15 +8,6 @@
 from django.db import models
 
 
-class AnhChiTietSanPham(models.Model):
-    id_sp = models.ForeignKey('SanPham', models.DO_NOTHING, db_column='ID_sp', blank=True, null=True)  # Field name made lowercase.
-    img = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'anh_chi_tiet_san_pham'
-
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -158,15 +149,6 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class LoaiSanPham(models.Model):
-    ten_loai_san_pham = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'loai_san_pham'
-        unique_together = (('id', 'ten_loai_san_pham'),)
-
-
 class NguoiDung(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     ho_dem = models.CharField(max_length=255, blank=True, null=True)
@@ -192,24 +174,15 @@ class SanPham(models.Model):
     ten_san_pham = models.CharField(max_length=255, blank=True, null=True)
     gia_san_pham = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     mo_ta_san_pham = models.TextField(blank=True, null=True)
-    ma_giam_gia = models.CharField(max_length=50, blank=True, null=True)
     so_luong_san_pham = models.CharField(max_length=11, blank=True, null=True)
     hinh_anh_san_pham = models.CharField(max_length=255, blank=True, null=True)
     ngay_them = models.DateTimeField()
     ngay_cap_nhat = models.DateTimeField()
+    loai_san_pham = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'san_pham'
-
-
-class SanPhamAndLoaiSanPham(models.Model):
-    id_san_pham = models.ForeignKey(SanPham, models.DO_NOTHING, db_column='ID_san_pham', blank=True, null=True)  # Field name made lowercase.
-    id_loai_san_pham = models.ForeignKey(LoaiSanPham, models.DO_NOTHING, db_column='ID_loai_san_pham', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'san_pham_and_loai_san_pham'
 
 
 class TrangThaiNguoiDung(models.Model):

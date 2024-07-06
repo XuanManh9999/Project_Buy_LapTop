@@ -32,4 +32,7 @@ urlpatterns = [
     path('order-manage/', views.order_manage, name='order_manage'),
     path('user-manage/', views.user_manage, name='user_manage'),
     path('logout/', views.logout_view, name='logout'),
+    path('user_manage/delete/<int:user_id>/', views.delete_user, name='user_delete'),
+    # product delete
+    path('product_manage/delete/<int:product_id>/', views.delete_product, name='product_delete'),
 ]
