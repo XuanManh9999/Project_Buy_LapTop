@@ -15,5 +15,12 @@ def register(request):
     return render(request, 'common/register.html')
 def forgot_password(request):
     return render(request, 'common/forgot_password.html')
-def home_admin(request):
-    return render(request, 'admin/base.html')
+# admin
+def home_manage(request):
+    return render(request, 'manage/base.html')
+def product_manage(request):
+    return render(request, 'manage/manage_product.html')
+def order_manage(request):
+    return render(request, 'manage/manage_order.html')
+def user_manage(request):
+    return render(request, 'manage/manage_user.html')

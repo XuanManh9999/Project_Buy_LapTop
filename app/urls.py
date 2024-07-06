@@ -27,5 +27,8 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('forgot-password/', views.forgot_password, name='forgot_password'),
     # Admin
-    path('handle-admin/', views.home_admin, name='home_admin'),
+    path('home-manage/', views.home_manage, name='home_manage'),
+    path('product-manage/', views.product_manage, name='product_manage'),
+    path('order-manage/', views.order_manage, name='order_manage'),
+    path('user-manage/', views.user_manage, name='user_manage'),
 ]
