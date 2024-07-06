@@ -8,6 +8,15 @@
 from django.db import models
 
 
+class AnhChiTietSanPham(models.Model):
+    id_sp = models.ForeignKey('SanPham', models.DO_NOTHING, db_column='ID_sp', blank=True, null=True)  # Field name made lowercase.
+    img = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'anh_chi_tiet_san_pham'
+
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -77,6 +86,33 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
+class ChiTietDatHang(models.Model):
+    id_nguoi_dung = models.ForeignKey('NguoiDung', models.DO_NOTHING, db_column='ID_nguoi_dung', blank=True, null=True)  # Field name made lowercase.
+    id_san_pham = models.ForeignKey('SanPham', models.DO_NOTHING, db_column='ID_san_pham', blank=True, null=True)  # Field name made lowercase.
+    so_luong = models.IntegerField(blank=True, null=True)
+    ghi_chu = models.TextField(blank=True, null=True)
+    id_dat_hang = models.ForeignKey('DatHang', models.DO_NOTHING, db_column='ID_dat_hang', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'chi_tiet_dat_hang'
+
+
+class DatHang(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    id_nguoi_dung = models.ForeignKey('NguoiDung', models.DO_NOTHING, db_column='ID_nguoi_dung', blank=True, null=True)  # Field name made lowercase.
+    ghi_chu = models.TextField(blank=True, null=True)
+    ma_giam_gia = models.CharField(max_length=50, blank=True, null=True)
+    trang_thai_dat_hang = models.CharField(max_length=255, blank=True, null=True)
+    ngay_them = models.DateTimeField()
+    dia_chi = models.TextField(blank=True, null=True)
+    sdt = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'dat_hang'
+
+
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -120,3 +156,66 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+class LoaiSanPham(models.Model):
+    ten_loai_san_pham = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'loai_san_pham'
+        unique_together = (('id', 'ten_loai_san_pham'),)
+
+
+class NguoiDung(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    ho_dem = models.CharField(max_length=255, blank=True, null=True)
+    ten = models.CharField(max_length=255, blank=True, null=True)
+    ho_va_ten = models.CharField(max_length=255, blank=True, null=True)
+    chi_tieu = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    ngay_sinh = models.DateField(blank=True, null=True)
+    so_dien_thoai = models.CharField(max_length=20, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    mat_khau = models.CharField(max_length=255, blank=True, null=True)
+    dia_chi = models.TextField(blank=True, null=True)
+    ngay_them = models.DateTimeField()
+    ngay_cap_nhat = models.DateTimeField()
+    vai_tro = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'nguoi_dung'
+
+
+class SanPham(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    ten_san_pham = models.CharField(max_length=255, blank=True, null=True)
+    gia_san_pham = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    mo_ta_san_pham = models.TextField(blank=True, null=True)
+    ma_giam_gia = models.CharField(max_length=50, blank=True, null=True)
+    so_luong_san_pham = models.CharField(max_length=11, blank=True, null=True)
+    hinh_anh_san_pham = models.CharField(max_length=255, blank=True, null=True)
+    ngay_them = models.DateTimeField()
+    ngay_cap_nhat = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'san_pham'
+
+
+class SanPhamAndLoaiSanPham(models.Model):
+    id_san_pham = models.ForeignKey(SanPham, models.DO_NOTHING, db_column='ID_san_pham', blank=True, null=True)  # Field name made lowercase.
+    id_loai_san_pham = models.ForeignKey(LoaiSanPham, models.DO_NOTHING, db_column='ID_loai_san_pham', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'san_pham_and_loai_san_pham'
+
+
+class TrangThaiNguoiDung(models.Model):
+    id_nguoi_dung = models.OneToOneField(NguoiDung, models.DO_NOTHING, db_column='ID_nguoi_dung', primary_key=True)  # Field name made lowercase.
+    trang_thai = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'trang_thai_nguoi_dung'

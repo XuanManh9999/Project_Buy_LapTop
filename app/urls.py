@@ -31,4 +31,5 @@ urlpatterns = [
     path('product-manage/', views.product_manage, name='product_manage'),
     path('order-manage/', views.order_manage, name='order_manage'),
     path('user-manage/', views.user_manage, name='user_manage'),
+    path('logout/', views.logout_view, name='logout'),
 ]
