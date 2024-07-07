@@ -112,7 +112,7 @@
     <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         <i class="fa fa-shopping-cart"></i>
         <span>Your Cart</span>
-        <div class="qty">{{ total_quantity }}</div> <!-- Thay thế với số lượng sản phẩm trong giỏ hàng -->
+        <div class="qty">{{ total_quantity|default:"0" }}</div> <!-- Thay thế với số lượng sản phẩm trong giỏ hàng -->
     </a>
     <div class="cart-dropdown">
         <div class="cart-list">

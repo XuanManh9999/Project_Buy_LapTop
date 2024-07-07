@@ -30,7 +30,32 @@ def index(request):
         'cart': cart,
     })
 def checkout(request):
-    return render(request, 'common/checkout.html')
+    # kiem tra xem nguoi dung da dang nhap chua
+    if not request.session.get('id'):
+        return redirect('login')
+    # Lấy giỏ hàng từ session
+    cart = request.session.get('cart', {})
+
+    # Lấy danh sách các sản phẩm từ giỏ hàng
+    product_ids = cart.keys()
+    products_in_cart = SanPham.objects.filter(id__in=product_ids)
+
+    # Tính toán tổng số lượng và tổng tiền
+    total_quantity = sum(cart[str(product.id)] for product in products_in_cart)
+    total_price = sum(product.gia_san_pham * cart[str(product.id)] for product in products_in_cart)
+
+    # Định dạng tiền tệ cho giá sản phẩm
+    locale.setlocale(locale.LC_ALL, 'vi_VN')
+    for product in products_in_cart:
+        product.gia_san_pham = locale.currency(product.gia_san_pham, grouping=True)
+
+    # Trả về template với context
+    return render(request, 'common/checkout.html', {
+        'cart_product': products_in_cart,
+        'total_quantity': total_quantity,
+        'price_products': locale.currency(total_price, grouping=True),
+        'cart': cart,
+    })
 
 def detail_product(request):
     return render(request, 'common/detail_product.html')
@@ -51,7 +76,8 @@ def login(request):
             if user[0].vai_tro == "admin":
                 return render(request, 'manage/base.html')
             else:
-                return render(request, 'common/products.html')
+                #chuyen huong ve trang index
+                return redirect('index')
         else:
             messages.warning(request, 'Email hoặc mật khẩu không đúng')
             return render(request, 'common/login.html')
